@@ -278,16 +278,16 @@ export function Translator() {
   return (
     <div className="flex flex-col gap-6">
       {error && (
-        <Alert variant="destructive" className="mb-2">
+        <Alert variant="destructive" className="mb-2 animate-in fade-in zoom-in duration-300">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <Card>
+      <Card className="border-blue-200 dark:border-blue-900 bg-white/50 dark:bg-slate-950/50 backdrop-blur-sm">
         <CardContent className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <LanguageSelector
               sourceLanguage={sourceLanguage}
               targetLanguage={targetLanguage}
@@ -297,39 +297,55 @@ export function Translator() {
             />
 
             {messages.length > 0 && (
-              <Button variant="outline" size="sm" onClick={clearHistory} className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearHistory}
+                className="w-full sm:w-auto bg-white dark:bg-slate-950 hover:bg-red-50 dark:hover:bg-red-950 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Clear History
               </Button>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4 mt-4 sm:mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">Original ({getLanguageName(sourceLanguage)})</h3>
-                <Button onClick={toggleListening} variant={isListening ? "destructive" : "default"} size="sm">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium text-blue-800 dark:text-blue-200">
+                  Original ({getLanguageName(sourceLanguage)})
+                </h3>
+                <Button
+                  onClick={toggleListening}
+                  variant={isListening ? "destructive" : "default"}
+                  size="sm"
+                  className={`transition-all duration-200 ${isListening ? "" : "hover:scale-105 active:scale-95"}`}
+                >
                   {isListening ? <MicOff className="h-4 w-4 mr-2" /> : <Mic className="h-4 w-4 mr-2" />}
                   {isListening ? "Stop" : "Start"} Recording
                 </Button>
               </div>
-              <div className="min-h-24 sm:min-h-32 p-3 sm:p-4 rounded-md border bg-white dark:bg-slate-950 text-sm sm:text-base">
-                {transcript || <span className="text-slate-400">Speak to see transcript...</span>}
+              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-white dark:bg-slate-950 text-sm sm:text-base shadow-sm">
+                {transcript || <span className="text-slate-400 dark:text-slate-500">Speak to see transcript...</span>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">Translation ({getLanguageName(targetLanguage)})</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium text-blue-800 dark:text-blue-200">
+                  Translation ({getLanguageName(targetLanguage)})
+                </h3>
                 {isTranslating && (
-                  <div className="flex items-center text-sm text-slate-500">
+                  <div className="flex items-center text-sm text-blue-600 dark:text-blue-400">
                     <Loader2 className="h-3 w-3 mr-2 animate-spin" />
                     Translating...
                   </div>
                 )}
               </div>
-              <div className="min-h-24 sm:min-h-32 p-3 sm:p-4 rounded-md border bg-white dark:bg-slate-950 text-sm sm:text-base">
-                {translation || <span className="text-slate-400">Translation will appear here...</span>}
+              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-white dark:bg-slate-950 text-sm sm:text-base shadow-sm">
+                {translation || (
+                  <span className="text-slate-400 dark:text-slate-500">Translation will appear here...</span>
+                )}
               </div>
               {translation && !translation.startsWith("[Translation error]") && (
                 <AudioControls
@@ -341,6 +357,7 @@ export function Translator() {
                       setIsSpeaking(false)
                     }
                   }}
+                  className="w-full sm:w-auto"
                 />
               )}
             </div>
