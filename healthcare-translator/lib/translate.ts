@@ -104,21 +104,16 @@ export async function translateText(text: string, sourceLanguage: string, target
     
     Translation:`
 
-    // Initialize Groq model with API key
-    const client = groq({
-      apiKey: groqApiKey,
-    })
-
-    // Generate translation with more specific parameters
-    const response = await client.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "mixtral-8x7b-32768",
+    // Initialize Groq model with API key and use completion directly
+    const model = groq("mixtral-8x7b-32768", { apiKey: groqApiKey })
+    const completion = await model.complete({
+      prompt,
       temperature: 0.2,
       max_tokens: 500,
       top_p: 0.95,
     })
 
-    const translatedText = response.choices[0]?.message?.content
+    const translatedText = completion.text
 
     // Validate the response
     if (!translatedText || typeof translatedText !== "string") {
