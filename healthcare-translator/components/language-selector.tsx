@@ -35,7 +35,7 @@ export function LanguageSelector({
   return (
     <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
       <Select value={sourceLanguage} onValueChange={onSourceLanguageChange}>
-        <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-slate-950">
+        <SelectTrigger className="w-full sm:w-[180px] bg-white/80 dark:bg-slate-950/80 shadow-lg transition-all hover:bg-white/95 dark:hover:bg-slate-950/95">
           <SelectValue placeholder="Source language" />
         </SelectTrigger>
         <SelectContent>
@@ -51,14 +51,14 @@ export function LanguageSelector({
         variant="outline"
         size="icon"
         onClick={onSwapLanguages}
-        className="rounded-full w-10 h-10 p-2 hover:scale-110 active:scale-95 transition-all duration-200 bg-white dark:bg-slate-950"
+        className="rounded-full w-10 h-10 p-2 hover:scale-110 active:scale-95 transition-all duration-200 bg-white/80 dark:bg-slate-950/80 shadow-lg"
       >
         <ArrowLeftRight className="h-4 w-4" />
         <span className="sr-only">Swap languages</span>
       </Button>
 
       <Select value={targetLanguage} onValueChange={onTargetLanguageChange}>
-        <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-slate-950">
+        <SelectTrigger className="w-full sm:w-[180px] bg-white/80 dark:bg-slate-950/80 shadow-lg transition-all hover:bg-white/95 dark:hover:bg-slate-950/95">
           <SelectValue placeholder="Target language" />
         </SelectTrigger>
         <SelectContent>
