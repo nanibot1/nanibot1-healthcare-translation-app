@@ -1,6 +1,7 @@
 "use server"
 
 import type { TranslationCache } from "@/types/translation"
+import { generateText } from "ai"
 import { groq } from "@ai-sdk/groq"
 import { headers } from "next/headers"
 
@@ -104,16 +105,13 @@ export async function translateText(text: string, sourceLanguage: string, target
     
     Translation:`
 
-    // Initialize Groq model with API key and use completion directly
-    const model = groq("mixtral-8x7b-32768", { apiKey: groqApiKey })
-    const completion = await model.complete({
-      prompt,
+    // Use the AI SDK's generateText function with Groq
+    const { text: translatedText } = await generateText({
+      model: groq("mixtral-8x7b-32768"),
+      prompt: prompt,
       temperature: 0.2,
-      max_tokens: 500,
-      top_p: 0.95,
+      maxTokens: 500,
     })
-
-    const translatedText = completion.text
 
     // Validate the response
     if (!translatedText || typeof translatedText !== "string") {
