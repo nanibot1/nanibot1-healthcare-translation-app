@@ -23,10 +23,10 @@ const localeToLanguageCode: Record<string, string> = {
 }
 
 export async function translateText(text: string, sourceLanguage: string, targetLanguage: string): Promise<string> {
-  // Check for Groq API key - use lowercase variable name
-  const groqApiKey = process.env.GROQ_API_KEY
+  // Check for Groq API key
+  const groqApiKey = process.env.groq_api_key
   if (!groqApiKey) {
-    console.error("GROQ_API_KEY is missing")
+    console.error("groq_api_key is missing")
     throw new Error("Translation service configuration error")
   }
 
@@ -43,23 +43,40 @@ export async function translateText(text: string, sourceLanguage: string, target
       return true
     }
 
-    // In production, verify the request is coming from our application
-    if (!userAgent || !referer || !appUrl) {
+    // In production, verify the request has basic headers
+    if (!userAgent) {
       return false
     }
 
-    // Check if the referer matches our app URL
-    try {
-      const refererUrl = new URL(referer)
-      const appUrlObj = new URL(appUrl)
-      return refererUrl.hostname === appUrlObj.hostname
-    } catch {
-      return false
+    // If we have a referer, verify it's from our domain
+    if (referer && appUrl) {
+      try {
+        const refererUrl = new URL(referer)
+        const appUrlObj = new URL(appUrl)
+
+        // Check if the referer hostname matches our app URL or is a Vercel deployment
+        return (
+          refererUrl.hostname === appUrlObj.hostname ||
+          refererUrl.hostname.endsWith(".vercel.app") ||
+          refererUrl.hostname.includes(".vercel.app")
+        )
+      } catch {
+        // If URL parsing fails, continue with basic validation
+        console.warn("Failed to parse URLs for security check")
+      }
     }
+
+    // Allow requests without referer in production (for initial page load)
+    return true
   }
 
   // Validate the request
   if (!isValidRequest()) {
+    console.error("Unauthorized request detected", {
+      userAgent,
+      referer,
+      appUrl,
+    })
     throw new Error("Unauthorized translation request")
   }
 
