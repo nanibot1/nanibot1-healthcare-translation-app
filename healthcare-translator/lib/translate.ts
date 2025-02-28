@@ -2,7 +2,6 @@
 
 import type { TranslationCache } from "@/types/translation"
 import { groq } from "@ai-sdk/groq"
-import { generateText } from "ai"
 import { headers } from "next/headers"
 
 // Cache to improve performance and reduce API calls
@@ -106,18 +105,20 @@ export async function translateText(text: string, sourceLanguage: string, target
     Translation:`
 
     // Initialize Groq model with API key
-    const model = groq("mixtral-8x7b-32768", {
+    const client = groq({
       apiKey: groqApiKey,
     })
 
     // Generate translation with more specific parameters
-    const { text: translatedText } = await generateText({
-      model,
-      prompt,
-      temperature: 0.2, // Lower temperature for more consistent translations
-      max_tokens: 500, // Increased token limit for longer translations
-      top_p: 0.95, // Slightly reduced top_p for more focused outputs
+    const response = await client.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "mixtral-8x7b-32768",
+      temperature: 0.2,
+      max_tokens: 500,
+      top_p: 0.95,
     })
+
+    const translatedText = response.choices[0]?.message?.content
 
     // Validate the response
     if (!translatedText || typeof translatedText !== "string") {
