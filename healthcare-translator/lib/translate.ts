@@ -24,7 +24,7 @@ const localeToLanguageCode: Record<string, string> = {
 
 export async function translateText(text: string, sourceLanguage: string, targetLanguage: string): Promise<string> {
   // Check for Groq API key
-  const groqApiKey = process.env.groq_api_key
+  const groqApiKey = process.env.GROQ_API_KEY
   if (!groqApiKey) {
     console.error("groq_api_key is missing")
     throw new Error("Translation service configuration error")
