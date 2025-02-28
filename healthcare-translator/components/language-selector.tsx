@@ -33,9 +33,9 @@ export function LanguageSelector({
   ]
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-2">
+    <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
       <Select value={sourceLanguage} onValueChange={onSourceLanguageChange}>
-        <SelectTrigger className="w-full sm:w-[160px] md:w-[180px]">
+        <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-slate-950">
           <SelectValue placeholder="Source language" />
         </SelectTrigger>
         <SelectContent>
@@ -47,13 +47,18 @@ export function LanguageSelector({
         </SelectContent>
       </Select>
 
-      <Button variant="outline" size="icon" onClick={onSwapLanguages} className="rounded-full">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={onSwapLanguages}
+        className="rounded-full w-10 h-10 p-2 hover:scale-110 active:scale-95 transition-all duration-200 bg-white dark:bg-slate-950"
+      >
         <ArrowLeftRight className="h-4 w-4" />
         <span className="sr-only">Swap languages</span>
       </Button>
 
       <Select value={targetLanguage} onValueChange={onTargetLanguageChange}>
-        <SelectTrigger className="w-full sm:w-[160px] md:w-[180px]">
+        <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-slate-950">
           <SelectValue placeholder="Target language" />
         </SelectTrigger>
         <SelectContent>
