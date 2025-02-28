@@ -1,8 +1,7 @@
 "use server"
 
 import type { TranslationCache } from "@/types/translation"
-import { generateText } from "ai"
-import { groq } from "@ai-sdk/groq"
+import { Groq } from "groq-sdk"
 import { headers } from "next/headers"
 
 // Cache to improve performance and reduce API calls
@@ -26,8 +25,8 @@ export async function translateText(text: string, sourceLanguage: string, target
   // Check for Groq API key
   const groqApiKey = process.env.GROQ_API_KEY
   if (!groqApiKey) {
-    console.error("groq_api_key is missing")
-    throw new Error("Translation service configuration error")
+    console.error("GROQ_API_KEY is missing")
+    return "[Translation error: API configuration issue. Please check your settings.]"
   }
 
   // Basic security check for request headers
@@ -77,7 +76,7 @@ export async function translateText(text: string, sourceLanguage: string, target
       referer,
       appUrl,
     })
-    throw new Error("Unauthorized translation request")
+    return "[Translation error: Unauthorized request]"
   }
 
   // Create a cache key based on the text and languages
@@ -105,18 +104,33 @@ export async function translateText(text: string, sourceLanguage: string, target
     
     Translation:`
 
-    // Use the AI SDK's generateText function with Groq
-    const { text: translatedText } = await generateText({
-      model: groq("mixtral-8x7b-32768"),
-      prompt: prompt,
+    // Initialize the Groq client using the official SDK
+    const groq = new Groq({ apiKey: groqApiKey })
+
+    // Make the API call
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a professional medical translator. Provide accurate and concise translations.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "mixtral-8x7b-32768",
       temperature: 0.2,
-      maxTokens: 500,
+      max_tokens: 500,
+      top_p: 0.95,
     })
+
+    const translatedText = completion.choices[0]?.message?.content
 
     // Validate the response
     if (!translatedText || typeof translatedText !== "string") {
       console.error("Invalid translation response:", translatedText)
-      throw new Error("Invalid translation response")
+      return "[Translation error: Invalid response from translation service]"
     }
 
     // Clean up the response to remove any potential quotation marks or extra whitespace
@@ -137,13 +151,16 @@ export async function translateText(text: string, sourceLanguage: string, target
 
     // Handle specific error types
     if (error instanceof Error) {
-      if (error.message.includes("API key")) {
+      const errorMessage = error.message || "Unknown error occurred"
+      console.error("Detailed error:", errorMessage)
+
+      if (errorMessage.includes("API key")) {
         return "[Translation error: API configuration issue. Please check your settings.]"
       }
-      if (error.message.includes("timeout")) {
+      if (errorMessage.includes("timeout")) {
         return "[Translation error: Request timed out. Please try again.]"
       }
-      return `[Translation error: ${error.message}]`
+      return `[Translation error: ${errorMessage}]`
     }
 
     return "[Translation error: An unexpected error occurred. Please try again.]"
