@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export function PrivacyNotice() {
   return (
-    <Alert className="mb-6 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/50 backdrop-blur-sm">
+    <Alert className="mb-6 border-blue-200/50 dark:border-blue-900/50 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md shadow-lg transition-all hover:bg-white/80 dark:hover:bg-slate-950/80">
       <AlertTriangle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
       <AlertTitle className="text-blue-800 dark:text-blue-300">Privacy Notice</AlertTitle>
       <AlertDescription className="mt-2 text-sm text-blue-700 dark:text-blue-200">
