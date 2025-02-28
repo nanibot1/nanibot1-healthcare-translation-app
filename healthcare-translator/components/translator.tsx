@@ -278,14 +278,14 @@ export function Translator() {
   return (
     <div className="flex flex-col gap-6">
       {error && (
-        <Alert variant="destructive" className="mb-2 animate-in fade-in zoom-in duration-300">
+        <Alert variant="destructive" className="mb-2 animate-in fade-in zoom-in duration-300 shadow-lg">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <Card className="border-blue-200 dark:border-blue-900 bg-white/50 dark:bg-slate-950/50 backdrop-blur-sm">
+      <Card className="border-blue-200/50 dark:border-blue-900/50 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md shadow-lg transition-all hover:bg-white/80 dark:hover:bg-slate-950/80">
         <CardContent className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <LanguageSelector
@@ -301,7 +301,7 @@ export function Translator() {
                 variant="outline"
                 size="sm"
                 onClick={clearHistory}
-                className="w-full sm:w-auto bg-white dark:bg-slate-950 hover:bg-red-50 dark:hover:bg-red-950 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                className="w-full sm:w-auto bg-white/80 dark:bg-slate-950/80 hover:bg-red-50 dark:hover:bg-red-950 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Clear History
@@ -319,13 +319,15 @@ export function Translator() {
                   onClick={toggleListening}
                   variant={isListening ? "destructive" : "default"}
                   size="sm"
-                  className={`transition-all duration-200 ${isListening ? "" : "hover:scale-105 active:scale-95"}`}
+                  className={`transition-all duration-200 shadow-lg ${
+                    isListening ? "" : "hover:scale-105 active:scale-95"
+                  }`}
                 >
                   {isListening ? <MicOff className="h-4 w-4 mr-2" /> : <Mic className="h-4 w-4 mr-2" />}
                   {isListening ? "Stop" : "Start"} Recording
                 </Button>
               </div>
-              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-white dark:bg-slate-950 text-sm sm:text-base shadow-sm">
+              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200/50 dark:border-blue-900/50 bg-white/80 dark:bg-slate-950/80 text-sm sm:text-base shadow-lg transition-all">
                 {transcript || <span className="text-slate-400 dark:text-slate-500">Speak to see transcript...</span>}
               </div>
             </div>
@@ -342,7 +344,7 @@ export function Translator() {
                   </div>
                 )}
               </div>
-              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200 dark:border-blue-900 bg-white dark:bg-slate-950 text-sm sm:text-base shadow-sm">
+              <div className="min-h-24 sm:min-h-32 p-4 rounded-lg border border-blue-200/50 dark:border-blue-900/50 bg-white/80 dark:bg-slate-950/80 text-sm sm:text-base shadow-lg transition-all">
                 {translation || (
                   <span className="text-slate-400 dark:text-slate-500">Translation will appear here...</span>
                 )}
@@ -357,7 +359,7 @@ export function Translator() {
                       setIsSpeaking(false)
                     }
                   }}
-                  className="w-full sm:w-auto"
+                  className="w-full sm:w-auto shadow-lg"
                 />
               )}
             </div>
