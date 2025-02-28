@@ -39,7 +39,7 @@ export function AudioControls({ isPlaying, onPlay, onPause, className }: AudioCo
       ) : (
         <>
           <Play className="h-4 w-4 mr-2" />
-          Play Translation
+          Speak
         </>
       )}
     </Button>
